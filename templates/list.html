@@ -1,0 +1,8 @@
+﻿{% include 'partials/header.html' %}
+<h2>Lista de Artigos</h2>
+<ul>
+{% for f in files %}
+    <li><a href='/articles/{{f}}'>{{f}}</a></li>
+{% endfor %}
+</ul>
+{% include 'partials/footer.html' %}

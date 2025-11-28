@@ -1,0 +1,4 @@
+﻿fastapi
+uvicorn
+jinja2
+markdown
