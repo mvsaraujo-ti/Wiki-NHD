@@ -1,7 +1,7 @@
-# ZEUS Knowledge Base 0.2  
-### 📘 Portal de Conhecimento Estilo Salesforce Lightning
+# WIKI NHD  
+### 📘 Portal de Conhecimento NHD TJMA
 
-O **ZEUS Knowledge Base 0.2** é um portal local de documentação técnica desenvolvido para servir como base de conhecimento estruturada, rápida e acessível, inspirada na interface **Salesforce Lightning Knowledge**.
+A **WIKI NHD* é um portal local de documentação técnica desenvolvido para servir como base de conhecimento estruturada, rápida e acessível, inspirada na interface **Salesforce Lightning Knowledge**.
 
 Este projeto funciona de forma totalmente **local**, sem internet, e integra-se facilmente ao **ZEUS (Copiloto IA com RAG + Ollama)**.
 
