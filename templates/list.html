@@ -26,6 +26,60 @@ Lista completa de documentos disponíveis na base de conhecimento.
     {% endfor %}
 
 </div>
+<!-- Seção de Categorias -->
+<div class="category-list" style="margin-bottom: 30px;">
+    <h3>Categorias</h3>
+    <div class="card-grid">
+        <a href="/category/sentinela" style="text-decoration:none;">
+            <div class="card">
+                <h3>Sentinela</h3>
+                <p>Sistemas de segurança e autenticação do TJMA.</p>
+            </div>
+        </a>
+
+        <a href="/category/cnj" style="text-decoration:none;">
+            <div class="card">
+                <h3>CNJ</h3>
+                <p>Sistemas do Conselho Nacional de Justiça.</p>
+            </div>
+        </a>
+
+        <a href="/category/infraestrutura" style="text-decoration:none;">
+            <div class="card">
+                <h3>Infraestrutura</h3>
+                <p>VPN, configuração de estações e mais.</p>
+            </div>
+        </a>
+
+        <a href="/category/seguranca" style="text-decoration:none;">
+            <div class="card">
+                <h3>Segurança</h3>
+                <p>Certificados digitais e normas de segurança.</p>
+            </div>
+        </a>
+
+        <a href="/category/suporte" style="text-decoration:none;">
+            <div class="card">
+                <h3>Suporte</h3>
+                <p>Informações sobre atendimento e suporte.</p>
+            </div>
+        </a>
+    </div>
+</div>
+
+<!-- Exibir artigos da categoria selecionada -->
+<h2>{{ category | capitalize }} - Artigos</h2>
+
+<div class="card-grid">
+    {% for file in files %}
+    <a href="/articles/{{ file }}" style="text-decoration:none;">
+        <div class="card">
+            <h3>{{ file.replace('.md', '').replace('-', ' ').title() }}</h3>
+            <p>Clique para abrir o artigo</p>
+        </div>
+    </a>
+    {% endfor %}
+</div>
 
 {% endif %}
 
