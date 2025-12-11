@@ -1,4 +1,104 @@
-﻿{% include 'partials/header.html' %}
-<h2>Artigo</h2>
-<pre style='white-space: pre-wrap;'>{{content}}</pre>
-{% include 'partials/footer.html' %}
+﻿{% extends "base.html" %}
+
+{% block content %}
+
+<!-- Breadcrumbs -->
+<div style="font-size: 14px; margin-bottom: 20px; color: #6b6c6f;">
+    <a href="/" style="color:#0176d3; text-decoration:none;">Home</a> /
+    <span id="dynamic-category"></span> /
+    <strong id="article-title-breadcrumb"></strong>
+</div>
+
+<!-- Badge de categoria -->
+<span id="category-badge"
+      style="
+        display:inline-block;
+        background:#e5f1fb;
+        color:#0176d3;
+        padding:6px 12px;
+        border-radius:6px;
+        font-size:14px;
+        margin-bottom:20px;">
+</span>
+
+<!-- Título -->
+<h1 id="article-title"
+    style="font-size: 28px; font-weight: 700; margin-bottom: 10px;">
+    {% if meta.title %}
+        {{ meta.title }}
+    {% else %}
+        {{ name.replace('.md', '').replace('-', ' ').title() }}
+    {% endif %}
+</h1>
+
+<!-- Resumo -->
+{% if meta.summary %}
+<p style="color:#6b6c6f; font-size:16px; margin-bottom:20px;">
+    {{ meta.summary }}
+</p>
+{% endif %}
+
+<!-- Data -->
+{% if meta.updated %}
+<p style="font-size: 13px; color:#777; margin-bottom: 15px;">
+    Última atualização: {{ meta.updated }}
+</p>
+{% endif %}
+
+<!-- Tags -->
+{% if meta.tags %}
+<div style="margin: 15px 0;">
+    {% for tag in meta.tags %}
+        <span style="
+            display:inline-block;
+            background:#e5f1fb;
+            color:#0176d3;
+            padding:5px 10px;
+            margin-right:5px;
+            font-size:13px;
+            border-radius:6px;">
+            #{{ tag }}
+        </span>
+    {% endfor %}
+</div>
+{% endif %}
+
+<!-- Corpo do artigo -->
+<div class="content-area" style="
+    background:white;
+    padding:25px;
+    border-radius:10px;
+    box-shadow:0 2px 6px rgba(0,0,0,0.08);
+">
+    {{ content | safe }}
+</div>
+
+<script>
+    const rawName = "{{ name }}";
+    const lower = rawName.toLowerCase();
+    let category = "";
+
+    // Detectar categoria automaticamente
+    if (lower.includes("sentinela") || lower.includes("tutor")) category = "Sentinela";
+    else if (lower.includes("apoia") || lower.includes("cnj") || lower.includes("enatjus")) category = "CNJ";
+    else if (lower.includes("vpn") || lower.includes("configuracao") || lower.includes("desligamento")) category = "Infraestrutura";
+    else if (lower.includes("certificado") || lower.includes("seguranca") || lower.includes("email")) category = "Segurança da Informação";
+    else if (lower.includes("suporte") || lower.includes("contatos")) category = "Suporte";
+
+    // Atualizar badge
+    document.getElementById("category-badge").textContent = category;
+
+    // Atualizar breadcrumbs
+    if (category) {
+        document.getElementById("dynamic-category").innerHTML =
+            `<a href="/category/${category}" style="color:#0176d3; text-decoration:none;">${category}</a>`;
+    } else {
+        document.getElementById("dynamic-category").innerHTML = "Artigos";
+    }
+
+    // Título no breadcrumb
+    const prettyTitle = document.getElementById("article-title").innerText;
+    document.getElementById("article-title-breadcrumb").innerText = prettyTitle;
+</script>
+
+{% endblock %}

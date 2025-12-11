@@ -1,26 +1,24 @@
-﻿{% extends "base.html" %}
+{% extends "base.html" %}
 
 {% block content %}
 
-<h2 style="font-weight: 600; color: #3b3c3f;">Todos os Artigos</h2>
+<h2 style="font-weight: 600; color: #3b3c3f;">
+Resultados para: "{{ query }}"
+</h2>
 
-<p style="margin-top: -10px; color: #6b6c6f;">
-Lista completa de documentos disponíveis na base de conhecimento.
-</p>
-
-{% if files|length == 0 %}
+{% if results|length == 0 %}
     <p style="margin-top: 20px; color: #6b6c6f;">
-        Nenhum artigo encontrado.
+        Nenhum artigo encontrado. Tente outro termo.
     </p>
 {% else %}
 
 <div class="card-grid">
 
-    {% for file in files %}
+    {% for file in results %}
     <a href="/articles/{{ file }}" style="text-decoration:none;">
         <div class="card">
             <h3>{{ file.replace('.md', '').replace('-', ' ').title() }}</h3>
-            <p>Clique para abrir o artigo</p>
+            <p>Clique para abrir o artigo completo</p>
         </div>
     </a>
     {% endfor %}

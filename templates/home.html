@@ -1,5 +1,50 @@
-﻿{% include 'partials/header.html' %}
-<h1 class='title'>ZEUS Knowledge 0.2</h1>
-<p>Interface estilo Salesforce Lightning</p>
-<a href='/articles'>Ver artigos</a>
-{% include 'partials/footer.html' %}
+﻿{% extends "base.html" %}
+
+{% block content %}
+
+<h2 style="font-weight: 600; color: #3b3c3f;">Categorias</h2>
+
+<p style="margin-top: -10px; color: #6b6c6f;">
+Selecione uma categoria ou use a barra de pesquisa acima.
+</p>
+
+<div class="card-grid">
+
+    <a href="/category/Sentinela" style="text-decoration:none;">
+        <div class="card">
+            <h3>Sentinela</h3>
+            <p>Plataforma integrada do TJMA (Tutor, Chamados, Documentos e Monitoramento)</p>
+        </div>
+    </a>
+
+    <a href="/category/CNJ" style="text-decoration:none;">
+        <div class="card">
+            <h3>Plataforma CNJ</h3>
+            <p>APOIA, e-NatJus, DataJud, sistemas corporativos e acessos</p>
+        </div>
+    </a>
+
+    <a href="/category/Infra" style="text-decoration:none;">
+        <div class="card">
+            <h3>Infraestrutura</h3>
+            <p>VPN, configuração de máquinas, desligamento automático</p>
+        </div>
+    </a>
+
+    <a href="/category/Segurança" style="text-decoration:none;">
+        <div class="card">
+            <h3>Segurança da Informação</h3>
+            <p>Certificados digitais, e-mails indevidos, diretrizes</p>
+        </div>
+    </a>
+
+    <a href="/category/Suporte" style="text-decoration:none;">
+        <div class="card">
+            <h3>Suporte e Atendimento</h3>
+            <p>Contatos oficiais, fluxos, orientações da CAU</p>
+        </div>
+    </a>
+
+</div>
+
+{% endblock %}
