@@ -153,7 +153,6 @@
             text-decoration: underline;
         }
 
-        /* Estilos para as caixas de destaque (Aviso, Alerta, Dica, Nota) */
         .content-area .alert-box {
             padding: 15px;
             border-radius: 8px;
@@ -191,9 +190,9 @@
 <body>
 
     <div class="header">
-     <a href="/" style="text-decoration:none; color: #fff;">
-         <h1>Wiki NHD</h1>
-     </a>   
+        <a href="/" style="text-decoration:none; color: #fff;">
+            <h1>Wiki NHD</h1>
+        </a>
     </div>
 
     <!-- Barra de Pesquisa Global -->
@@ -212,6 +211,19 @@
     <footer>
         Wiki NHD • Desenvolvido por Maxwell Araujo
     </footer>
+
+    <!-- Botão Zeus -->
+    <div id="zeus-button">
+        <img src="/static/images/wikiicone.png" style="width: 60%; border-radius: 50%;">
+    </div>
+
+    <link rel="stylesheet" href="/static/css/zeus.css">
+    <script src="/static/js/zeus.js"></script>
+    
+<!-- Painel Zeus -->
+<div id="zeus-panel" class="closed">
+    <iframe src="/zeus-panel" style="width:100%; height:100%; border:none;"></iframe>
+</div>
 
 </body>
 </html>

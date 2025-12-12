@@ -18,5 +18,5 @@ Estagiários e terceirizados precisam de autorização.
 - Falha na conexão de rede.
 
 ## Observações
-Em caso de dúvidas, contactar o setor de Redes.
+A VPN só pode ser concedida após envio de portaria de teletrabalho. 
 

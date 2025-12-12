@@ -20,7 +20,7 @@ updated: "2025-12-03"
 importance: "alta"
 ---
 
-# O que é o Sistema Sentinela do TJMA?
+# O que é a plataforma Sentinela do TJMA?
 
 O **Sentinela** é a plataforma oficial de **segurança e autenticação** utilizada pelo Tribunal de Justiça do Maranhão (TJMA) para acesso aos sistemas internos.  
 Ele centraliza o acesso a diversos sistemas institucionais, proporcionando **segurança, controle e unificação** dos serviços digitais do Tribunal.

@@ -86,3 +86,32 @@ def home(request: Request):
 #   ARTIGOS
 # ------------------------
 app.include_router(articles_router, prefix="/articles")
+
+@app.get("/zeus-panel")
+def zeus_panel(request: Request):
+    return templates.TemplateResponse("zeus_panel.html", {"request": request})
+
+from pydantic import BaseModel
+
+class ZeusQuery(BaseModel):
+    question: str
+
+import requests  # coloque no topo se não existir
+
+@app.post("/zeus-chat")
+def zeus_chat(payload: ZeusQuery):
+    question = payload.question
+
+    try:
+        response = requests.post(
+            "http://localhost:8601/chat",   # endpoint real do Zeus
+            json={"question": question},
+            timeout=120
+        )
+
+        data = response.json()
+        return {"answer": data.get("answer", "Erro: resposta vazia do Zeus")}
+
+    except Exception as e:
+        return {"answer": f"Erro ao conectar ao Zeus: {str(e)}"}
+

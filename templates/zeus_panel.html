@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            padding: 10px;
+        }
+
+        #messages {
+            height: 420px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 8px;
+            background: #fafafa;
+        }
+
+        #input-area {
+            margin-top: 10px;
+            display: flex;
+        }
+
+        #input-area input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        #input-area button {
+            padding: 10px 20px;
+            margin-left: 8px;
+            background: #0176d3;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="messages"></div>
+
+    <div id="input-area">
+        <input id="user-input" type="text" placeholder="Pergunte ao Zeus...">
+        <button onclick="sendMessage()">Enviar</button>
+    </div>
+
+    <script>
+        async function sendMessage() {
+            const input = document.getElementById("user-input");
+            const text = input.value.trim();
+            if (!text) return;
+
+            addMessage("Você", text);
+            input.value = "";
+
+            const resp = await fetch("/zeus-chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ question: text })
+            });
+
+            const data = await resp.json();
+            addMessage("Zeus", data.answer);
+        }
+
+        function addMessage(sender, text) {
+            const box = document.getElementById("messages");
+            box.innerHTML += `<p><strong>${sender}:</strong> ${text}</p>`;
+            box.scrollTop = box.scrollHeight;
+        }
+    </script>
+
+</body>
+</html>
