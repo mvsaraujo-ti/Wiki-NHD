@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+
+<link rel="stylesheet" href="/static/css/portal.css">
+
+<div class="portal-wrapper">
+    
+    <h1 class="portal-title">Painel de Sistemas</h1>
+    <p class="portal-subtitle">Acesse rapidamente as principais ferramentas corporativas</p>
+
+    <div class="cards-grid">
+
+        <!-- SENTINELA -->
+        <a href="https://sistemas.tjma.jus.br/sentinela/" target="_blank" class="card shortcut-card">
+            <div class="icon">🛡️</div>
+            <h3>Sentinela</h3>
+            <p>Plataforma integrada do TJMA</p>
+        </a>
+
+        <!-- GLPI -->
+        <a href="https://atendimento.tjma.jus.br" target="_blank" class="card shortcut-card">
+            <div class="icon">🧰</div>
+            <h3>GLPI</h3>
+            <p>Chamados e solicitações de TI</p>
+        </a>
+
+        <!-- GMAIL -->
+        <a href="https://mail.google.com" target="_blank" class="card shortcut-card">
+            <div class="icon">📧</div>
+            <h3>Gmail</h3>
+            <p>E-mail institucional do TJMA</p>
+        </a>
+
+        <!-- MALOTE DIGITAL -->
+        <a href="https://malote.tjma.jus.br/organizacional/login.jsf" target="_blank" class="card shortcut-card">
+            <div class="icon">📨</div>
+            <h3>Malote Digital</h3>
+            <p>Envio e controle de documentos</p>
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}

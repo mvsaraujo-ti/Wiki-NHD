@@ -1,0 +1,81 @@
+.portal-wrapper {
+    margin-left: 230px;
+    padding: 40px;
+}
+
+.portal-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.portal-subtitle {
+    color: #475569;
+    margin-bottom: 40px;
+    font-size: 17px;
+}
+
+/* GRID DE CARDS */
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 28px;
+}
+
+/* CARD BASE */
+.shortcut-card {
+    background: #1e1e2f;
+    padding: 30px;
+    border-radius: 18px;
+    text-decoration: none;
+    color: white;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+    border: 1px solid rgba(255,255,255,0.05);
+    transition: 0.25s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+/* BRILHO FUTURISTA */
+.shortcut-card::before {
+    content: "";
+    position: absolute;
+    top: -80%;
+    left: -80%;
+    width: 250%;
+    height: 250%;
+    background: linear-gradient(135deg, rgba(0,140,255,0.35), rgba(0,255,255,0.12));
+    transform: rotate(25deg);
+    opacity: 0;
+    transition: 0.4s ease;
+}
+
+.shortcut-card:hover::before {
+    opacity: 1;
+}
+
+/* EFEITO DE ELEVAÇÃO */
+.shortcut-card:hover {
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.35);
+    border-color: rgba(0,140,255,0.4);
+}
+
+/* ÍCONES GRANDES */
+.icon {
+    font-size: 42px;
+    margin-bottom: 18px;
+}
+
+/* TÍTULO DO CARD */
+.shortcut-card h3 {
+    font-size: 20px;
+    margin: 0 0 6px 0;
+}
+
+/* DESCRIÇÃO */
+.shortcut-card p {
+    color: #cbd5e1;
+    font-size: 14px;
+    margin: 0;
+}

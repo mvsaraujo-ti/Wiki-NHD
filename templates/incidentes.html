@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1 style="margin-bottom: 20px;">🚨 Portal de Incidentes</h1>
+
+<!-- CARDS RESUMO -->
+<div class="incident-cards">
+
+    <div class="incident-card open">
+        <h3>🔴 Abertos</h3>
+        <p class="number">4</p>
+    </div>
+
+    <div class="incident-card progress">
+        <h3>🟡 Em andamento</h3>
+        <p class="number">2</p>
+    </div>
+
+    <div class="incident-card resolved">
+        <h3>🟢 Resolvidos</h3>
+        <p class="number">12</p>
+    </div>
+
+    <div class="incident-card month">
+        <h3>📅 Total no mês</h3>
+        <p class="number">18</p>
+    </div>
+
+</div>
+
+<!-- BOTÃO NOVO INCIDENTE -->
+<button class="new-incident-btn" onclick="alert('Novo incidente em breve...')">
+    ➕ Registrar Incidente
+</button>
+
+<!-- LISTA DE INCIDENTES -->
+<h2 style="margin-top: 40px;">Lista de Incidentes</h2>
+
+<table class="incident-table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Título</th>
+            <th>Categoria</th>
+            <th>Status</th>
+            <th>Abertura</th>
+            <th>Responsável</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        <tr>
+            <td>#1421</td>
+            <td>VPN Instável</td>
+            <td>Rede</td>
+            <td><span class="tag open">Aberto</span></td>
+            <td>10/02/2025</td>
+            <td>João Silva</td>
+        </tr>
+
+        <tr>
+            <td>#1420</td>
+            <td>Erro no Sentinela</td>
+            <td>Sistemas</td>
+            <td><span class="tag progress">Em Andamento</span></td>
+            <td>09/02/2025</td>
+            <td>Ana Lima</td>
+        </tr>
+
+        <tr>
+            <td>#1418</td>
+            <td>GLPI Não Carrega</td>
+            <td>TI</td>
+            <td><span class="tag resolved">Resolvido</span></td>
+            <td>07/02/2025</td>
+            <td>Carlos Sousa</td>
+        </tr>
+
+    </tbody>
+</table>
+
+{% endblock %}

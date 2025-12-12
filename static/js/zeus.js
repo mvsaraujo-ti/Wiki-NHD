@@ -1,6 +1,8 @@
-console.log("Zeus inicializado.");
-
-document.getElementById("zeus-button").addEventListener("click", () => {
+document.addEventListener("DOMContentLoaded", () => {
     const panel = document.getElementById("zeus-panel");
-    panel.classList.toggle("open");
+    const button = document.getElementById("zeus-button");
+
+    button.addEventListener("click", () => {
+        panel.classList.toggle("open");
+    });
 });

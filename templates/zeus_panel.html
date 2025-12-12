@@ -1,80 +1,217 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            padding: 10px;
-        }
-
-        #messages {
-            height: 420px;
-            overflow-y: auto;
-            border: 1px solid #ddd;
-            padding: 10px;
-            border-radius: 8px;
-            background: #fafafa;
-        }
-
-        #input-area {
-            margin-top: 10px;
-            display: flex;
-        }
-
-        #input-area input {
-            flex: 1;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-        }
-
-        #input-area button {
-            padding: 10px 20px;
-            margin-left: 8px;
-            background: #0176d3;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-    </style>
+  <meta charset="utf-8" />
+  <title>Assistente Zeus</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    :root{
+      --primary:#2563eb;
+      --muted:#f4f6f9;
+      --card:#ffffff;
+      --accent:#e6eefc;
+      --text:#222;
+    }
+    body{font-family:Inter,Arial,Helvetica,sans-serif;margin:0;color:var(--text);background:var(--card);}
+    .panel-head{display:flex;align-items:center;gap:12px;padding:18px;border-bottom:1px solid #eee}
+    .panel-head h2{margin:0;color:var(--primary);font-size:18px}
+    .panel-body{padding:14px;overflow:auto;height:calc(100vh - 60px);box-sizing:border-box}
+    .section{margin-bottom:16px}
+    .label{font-size:13px;color:#444;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+    .search-input{width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;box-sizing:border-box}
+    .quick-list{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+    .quick-item{background:var(--muted);padding:10px;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:10px}
+    .quick-item:hover{background:#eaeefb}
+    .recent-list{display:flex;flex-direction:column;gap:8px}
+    .recent-item{background:#fff;padding:10px;border-radius:8px;border:1px solid #f0f0f0;cursor:pointer}
+    /* Chat */
+    .chat-box{display:flex;flex-direction:column;gap:8px}
+    .chat-log{max-height:240px;overflow:auto;padding:8px;border-radius:8px;background:#fbfbfb;border:1px solid #f1f1f1}
+    .chat-entry{margin-bottom:8px}
+    .chat-entry.user{text-align:right}
+    .chat-entry .bubble{display:inline-block;padding:8px 10px;border-radius:8px;max-width:85%;}
+    .chat-entry.user .bubble{background:var(--primary);color:#fff}
+    .chat-entry.bot .bubble{background:#eef3ff;color:#0b3a86}
+    .chat-controls{display:flex;gap:8px;margin-top:8px}
+    .btn{background:var(--primary);color:#fff;padding:8px 12px;border-radius:8px;border:none;cursor:pointer}
+    .btn.ghost{background:transparent;color:var(--primary);border:1px solid var(--primary)}
+    .small{font-size:13px}
+  </style>
 </head>
-
 <body>
+  <div class="panel-head">
+    <h2>🤖 Assistente Zeus</h2>
+    <div style="margin-left:auto;font-size:13px;color:#666">Ajuda rápida e sugestões</div>
+  </div>
 
-    <div id="messages"></div>
-
-    <div id="input-area">
-        <input id="user-input" type="text" placeholder="Pergunte ao Zeus...">
-        <button onclick="sendMessage()">Enviar</button>
+  <div class="panel-body">
+    <!-- Busca rápida -->
+    <div class="section">
+      <div class="label">🔎 Busca rápida</div>
+      <input id="zeus-search" class="search-input" placeholder="Pesquisar artigos (pressione Enter)"/>
+      <div id="zeus-search-results" class="quick-list" style="margin-top:8px"></div>
     </div>
 
-    <script>
-        async function sendMessage() {
-            const input = document.getElementById("user-input");
-            const text = input.value.trim();
-            if (!text) return;
+    <!-- Sugestões automáticas -->
+    <div class="section">
+      <div class="label">✨ Sugestões inteligentes</div>
+      <div id="zeus-suggestions" class="quick-list">
+        <!-- preenchido dinamicamente -->
+      </div>
+    </div>
 
-            addMessage("Você", text);
-            input.value = "";
+    <!-- Últimas páginas acessadas (cliente-side) -->
+    <div class="section">
+      <div class="label">🕘 Últimas páginas acessadas</div>
+      <div id="zeus-recent" class="recent-list">
+        <div class="small" style="color:#777">Carregando...</div>
+      </div>
+    </div>
 
-            const resp = await fetch("/zeus-chat", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ question: text })
-            });
+       </div>
+    </div>
 
-            const data = await resp.json();
-            addMessage("Zeus", data.answer);
-        }
+    <!-- Atalhos úteis -->
+    <div class="section">
+      <div class="label">📌 Atalhos úteis</div>
+      <div class="quick-list">
+        <div class="quick-item" onclick="window.open('https://atendimento.tjma.jus.br','_blank')">🛠️ GLPI — Chamados</div>
+        <div class="quick-item" onclick="window.open('https://mail.google.com','_blank')">📧 Gmail</div>
+        <div class="quick-item" onclick="window.open('https://sistemas.tjma.jus.br/sentinela/','_blank')">🛡️ Sentinela</div>
+        <div class="quick-item" id="open-zeus-full">🤖 Abrir Zeus Completo</div>
+      </div>
+    </div>
 
-        function addMessage(sender, text) {
-            const box = document.getElementById("messages");
-            box.innerHTML += `<p><strong>${sender}:</strong> ${text}</p>`;
-            box.scrollTop = box.scrollHeight;
-        }
-    </script>
+  </div>
 
+  <script>
+    // Helper para criar item clicável de resultado
+    function makeResultItem(title, href) {
+      const d = document.createElement('div');
+      d.className = 'quick-item';
+      d.textContent = title;
+      d.onclick = ()=> { window.location.href = href; recordVisited(href, title); };
+      return d;
+    }
+
+    // grava página recente no localStorage
+    function recordVisited(href, title){
+      try{
+        const key = 'nhd_recent';
+        const list = JSON.parse(localStorage.getItem(key)||'[]');
+        // remove duplicatas
+        const filtered = list.filter(i=>i.href !== href);
+        filtered.unshift({href, title, ts: Date.now()});
+        // manter só 12
+        localStorage.setItem(key, JSON.stringify(filtered.slice(0,12)));
+        renderRecent();
+      }catch(e){ console.error(e) }
+    }
+
+    function renderRecent(){
+      const key = 'nhd_recent';
+      const cont = document.getElementById('zeus-recent');
+      const list = JSON.parse(localStorage.getItem(key)||'[]');
+      cont.innerHTML = '';
+      if(!list.length){ cont.innerHTML='<div class="small" style="color:#777">Nenhuma página recente</div>'; return; }
+      list.forEach(item=>{
+        const el = document.createElement('div');
+        el.className = 'recent-item';
+        el.innerHTML = `<div style="font-weight:600">${item.title}</div><div class="small" style="color:#666">${new Date(item.ts).toLocaleString()}</div>`;
+        el.onclick = ()=> window.location.href = item.href;
+        cont.appendChild(el);
+      });
+    }
+
+    // BUSCA (enter)
+    document.getElementById('zeus-search').addEventListener('keydown', async (e)=>{
+      if(e.key === 'Enter'){
+        e.preventDefault();
+        const q = e.target.value.trim();
+        if(!q) return;
+        const res = await fetch(`/search?query=${encodeURIComponent(q)}`);
+        const text = await res.text();
+        // simples: extrair links do HTML de resultados (search.html)
+        const temp = document.createElement('div');
+        temp.innerHTML = text;
+        const links = Array.from(temp.querySelectorAll('a')).slice(0,6);
+        const container = document.getElementById('zeus-search-results');
+        container.innerHTML = '';
+        if(!links.length){ container.innerHTML='<div class="small" style="color:#777">Nenhum resultado</div>'; return; }
+        links.forEach(a=>{
+          const item = makeResultItem(a.textContent || a.href, a.getAttribute('href') || a.href);
+          container.appendChild(item);
+        });
+      }
+    });
+
+    // Sugestões automáticas: chama /zeus-recent (server) to get most recent articles by mtime
+    async function loadSuggestions(){
+      try{
+        const r = await fetch('/zeus-recent');
+        const data = await r.json();
+        const container = document.getElementById('zeus-suggestions');
+        container.innerHTML = '';
+        if(!data.length){ container.innerHTML='<div class="small" style="color:#777">Sem sugestões</div>'; return; }
+        data.slice(0,6).forEach(item=>{
+          const el = document.createElement('div');
+          el.className = 'quick-item';
+          el.innerHTML = `<div style="font-weight:600">${item.title}</div><div class="small" style="color:#666">${item.preview||''}</div>`;
+          el.onclick = ()=> { window.location.href = item.href; recordVisited(item.href,item.title); };
+          container.appendChild(el);
+        });
+      }catch(e){ console.error(e) }
+    }
+
+    // Chat: envia pergunta para /zeus-chat e mostra resposta
+    document.getElementById('zeus-chat-send').addEventListener('click', async ()=>{
+      const input = document.getElementById('zeus-chat-input');
+      const q = input.value.trim();
+      if(!q) return;
+      appendChat('user', q);
+      input.value='';
+      appendChat('bot', 'Pensando...');
+      try{
+        const r = await fetch('/zeus-chat', {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({question:q})
+        });
+        const json = await r.json();
+        // remove the 'Pensando...' placeholder
+        removeLastBotPlaceholder();
+        appendChat('bot', json.answer || '(sem resposta)');
+      }catch(e){
+        removeLastBotPlaceholder();
+        appendChat('bot', 'Erro ao conectar ao Zeus: '+e.message);
+      }
+    });
+
+    function appendChat(kind, text){
+      const log = document.getElementById('zeus-chat-log');
+      const div = document.createElement('div');
+      div.className = 'chat-entry ' + (kind==='user' ? 'user':'bot');
+      div.innerHTML = `<div class="bubble">${text}</div>`;
+      log.appendChild(div);
+      log.scrollTop = log.scrollHeight;
+    }
+    function removeLastBotPlaceholder(){
+      const log = document.getElementById('zeus-chat-log');
+      const nodes = Array.from(log.children).reverse();
+      const idx = nodes.findIndex(n=>n.classList.contains('bot') && n.textContent.includes('Pensando'));
+      if(idx>=0) nodes[idx].remove();
+    }
+
+    // abrir Zeus completo
+    document.getElementById('open-zeus-full').addEventListener('click', ()=>{
+      window.location.href = '/zeus/'; // seu painel completo
+    });
+
+    // inicialização
+    (function init(){
+      loadSuggestions();
+      renderRecent();
+    })();
+  </script>
 </body>
 </html>
