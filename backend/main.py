@@ -7,37 +7,47 @@ from pydantic import BaseModel
 import os
 import requests
 
-# ============================
-#  CONFIGURAÇÃO BASE
-# ============================
+# =======================================
+#   CONFIGURAÇÃO DE CAMINHOS
+# =======================================
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-ROOT_DIR = os.path.abspath(os.path.join(BASE_DIR, ".."))
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))        # /backend
+ROOT_DIR = os.path.abspath(os.path.join(BASE_DIR, ".."))     # /Wiki-NHD
 
-templates = Jinja2Templates(directory=os.path.join(ROOT_DIR, "templates"))
+TEMPLATES_DIR = os.path.join(ROOT_DIR, "templates")
+STATIC_DIR = os.path.join(ROOT_DIR, "static")
+ARTICLES_DIR = os.path.join(ROOT_DIR, "articles")
+
+templates = Jinja2Templates(directory=TEMPLATES_DIR)
+
+# =======================================
+#   FASTAPI
+# =======================================
 
 app = FastAPI(title="Wiki NHD + Zeus Assistant")
 
-app.mount(
-    "/static",
-    StaticFiles(directory=os.path.join(ROOT_DIR, "static")),
-    name="static"
-)
-
-ARTICLES_DIR = os.path.join(ROOT_DIR, "articles")
+app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 
-# ============================
-#  ROTA HOME
-# ============================
+# =======================================
+#   PÁGINA LOGIN
+# =======================================
+@app.get("/login", response_class=HTMLResponse)
+def login_page(request: Request):
+    return templates.TemplateResponse("login.html", {"request": request})
+
+
+# =======================================
+#   HOME
+# =======================================
 @app.get("/")
 def home(request: Request):
     return templates.TemplateResponse("home.html", {"request": request})
 
 
-# ============================
-#  ROTA BUSCA
-# ============================
+# =======================================
+#   BUSCA
+# =======================================
 @app.get("/search", response_class=HTMLResponse)
 def search_articles(request: Request, query: str = ""):
     results = []
@@ -47,12 +57,12 @@ def search_articles(request: Request, query: str = ""):
         if filename.endswith(".md"):
             filepath = os.path.join(ARTICLES_DIR, filename)
 
-            # Busca em nome do arquivo
+            # busca no nome
             if query_lower in filename.lower():
                 results.append(filename)
                 continue
 
-            # Busca no conteúdo
+            # busca no conteúdo
             with open(filepath, "r", encoding="utf-8") as f:
                 content = f.read().lower()
                 if query_lower in content:
@@ -64,9 +74,9 @@ def search_articles(request: Request, query: str = ""):
     )
 
 
-# ============================
-#  ROTA CATEGORIAS
-# ============================
+# =======================================
+#   CATEGORIAS
+# =======================================
 @app.get("/category/{category_name}", response_class=HTMLResponse)
 def category_page(request: Request, category_name: str):
     results = []
@@ -92,23 +102,23 @@ def category_page(request: Request, category_name: str):
     )
 
 
-# ============================
-#  ROTAS DE ARTIGOS
-# ============================
+# =======================================
+#   ARTIGOS
+# =======================================
 app.include_router(articles_router, prefix="/articles")
 
 
-# ============================
-#  ZEUS PANEL (assistente)
-# ============================
-@app.get("/zeus-panel")
+# =======================================
+#   ZEUS PANEL
+# =======================================
+@app.get("/zeus-panel", response_class=HTMLResponse)
 def zeus_panel(request: Request):
     return templates.TemplateResponse("zeus_panel.html", {"request": request})
 
 
-# ============================
-#  CHAT DO ZEUS
-# ============================
+# =======================================
+#   ZEUS CHAT
+# =======================================
 class ZeusQuery(BaseModel):
     question: str
 
@@ -126,6 +136,10 @@ def zeus_chat(payload: ZeusQuery):
     except Exception as e:
         return {"answer": f"Erro ao conectar ao Zeus: {str(e)}"}
 
+
+# =======================================
+#   PÁGINAS DO NHD+
+# =======================================
 @app.get("/feed")
 def feed_page(request: Request):
     return templates.TemplateResponse("feed.html", {"request": request})
@@ -134,6 +148,10 @@ def feed_page(request: Request):
 def incidentes_page(request: Request):
     return templates.TemplateResponse("incidentes.html", {"request": request})
 
-@app.get("/portal", response_class=HTMLResponse)
-def portal(request: Request):
+@app.get("/portal")
+def portal_page(request: Request):
     return templates.TemplateResponse("portal.html", {"request": request})
+
+@app.get("/login", response_class=HTMLResponse)
+def login_page(request: Request):
+    return templates.TemplateResponse("login.html", {"request": request})

@@ -1,79 +1,328 @@
-/* Cards de resumo */
+/* ================= INCIDENTES — VISUAL FUTURISTA ================= */
+
+.incident-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.incident-subtitle {
+    display: block;
+    font-size: 14px;
+    color: #64748b;
+    margin-top: 4px;
+}
+
+/* ================= CARDS ================= */
+
 .incident-cards {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 22px;
+    margin: 30px 0;
 }
 
 .incident-card {
-    width: 220px;
-    padding: 20px;
-    border-radius: 12px;
-    color: white;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-}
-
-.incident-card h3 {
-    margin: 0;
-    font-size: 18px;
-}
-
-.incident-card .number {
-    font-size: 36px;
-    font-weight: bold;
-    margin-top: 10px;
-}
-
-/* Cores */
-.incident-card.open { background: #dc2626; }      /* Vermelho */
-.incident-card.progress { background: #facc15; color: black; } /* Amarelo */
-.incident-card.resolved { background: #16a34a; } /* Verde */
-.incident-card.month { background: #1d4ed8; }    /* Azul */
-
-/* Botão novo incidente */
-.new-incident-btn {
-    margin-top: 30px;
-    padding: 12px 18px;
-    background: #2563eb;
-    color: white;
-    border: none;
-    font-size: 16px;
-    border-radius: 8px;
-    cursor: pointer;
-}
-
-.new-incident-btn:hover {
-    background: #1e40af;
-}
-
-/* Tabela */
-.incident-table {
-    width: 100%;
-    margin-top: 20px;
-    border-collapse: collapse;
-    background: white;
-    border-radius: 10px;
+    position: relative;
+    padding: 24px;
+    border-radius: 20px;
+    color: #fff;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.18);
+    transition: all 0.3s ease;
     overflow: hidden;
 }
 
-.incident-table th {
-    background: #1e3a8a;
-    color: white;
-    padding: 12px;
+.incident-card h3 {
+    font-size: 14px;
+    font-weight: 500;
+    opacity: 0.9;
 }
 
+.incident-card .number {
+    font-size: 44px;
+    font-weight: 800;
+    margin-top: 6px;
+}
+
+.card-icon {
+    position: absolute;
+    right: 18px;
+    bottom: 14px;
+    font-size: 48px;
+    opacity: 0.15;
+}
+
+/* CORES */
+.incident-card.open {
+    background: linear-gradient(135deg, #ef4444, #7f1d1d);
+}
+
+.incident-card.progress {
+    background: linear-gradient(135deg, #facc15, #92400e);
+    color: #1f2937;
+}
+
+.incident-card.resolved {
+    background: linear-gradient(135deg, #22c55e, #14532d);
+}
+
+.incident-card.month {
+    background: linear-gradient(135deg, #3b82f6, #1e3a8a);
+}
+
+.incident-card:hover {
+    transform: translateY(-8px) scale(1.03);
+}
+
+/* ================= AÇÕES ================= */
+
+.incident-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 25px;
+}
+
+.new-incident-btn {
+    background: linear-gradient(135deg, #2563eb, #1e40af);
+    border: none;
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 10px 25px rgba(37,99,235,0.45);
+    transition: all 0.25s ease;
+}
+
+.new-incident-btn:hover {
+    transform: scale(1.05);
+}
+
+/* ================= TABELA ================= */
+
+.incident-section-title {
+    margin: 30px 0 14px;
+}
+
+.incident-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 12px 28px rgba(0,0,0,0.1);
+}
+
+.incident-table thead {
+    background: #f1f5f9;
+}
+
+.incident-table th,
 .incident-table td {
-    padding: 12px;
-    border-bottom: 1px solid #e5e7eb;
+    padding: 14px 16px;
+    font-size: 14px;
+    text-align: left;
 }
 
-/* Tags de status */
+.incident-table tbody tr {
+    transition: background 0.2s ease;
+}
+
+.incident-table tbody tr:hover {
+    background: #f8fafc;
+}
+
+/* STATUS PILLS */
 .tag {
-    padding: 4px 10px;
-    border-radius: 6px;
-    font-size: 13px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
 }
 
-.tag.open { background: #fecaca; color: #991b1b; }
-.tag.progress { background: #fef08a; color: #854d0e; }
-.tag.resolved { background: #bbf7d0; color: #166534; }
+.tag.open {
+    background: rgba(239,68,68,0.15);
+    color: #b91c1c;
+}
+
+.tag.progress {
+    background: rgba(250,204,21,0.25);
+    color: #92400e;
+}
+
+.tag.resolved {
+    background: rgba(34,197,94,0.2);
+    color: #166534;
+}
+
+/* ================= MODAL INCIDENTE ================= */
+
+.incident-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: none; /* 🔥 ESSENCIAL */
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.incident-modal-content {
+    background: #ffffff;
+    width: 460px;
+    max-width: 90%;
+    border-radius: 18px;
+    padding: 24px 26px;
+    box-shadow: 0 30px 70px rgba(0,0,0,0.4);
+    animation: modalFadeUp 0.25s ease;
+}
+
+@keyframes modalFadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.incident-modal-content {
+    animation: modalFadeUp 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+
+.modal-resumo {
+    margin-top: 16px;
+    background: #f1f5f9;
+    padding: 14px;
+    border-radius: 12px;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.modal-close {
+    margin-top: 18px;
+    width: 100%;
+    border: none;
+    background: #2563eb;
+    color: #fff;
+    padding: 10px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+}
+/* ================= STATUS NO MODAL ================= */
+
+.modal-status {
+    display: inline-block;
+    margin: 8px 0 14px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+/* Inoperante */
+.modal-status.inoperante {
+    background: rgba(239,68,68,0.15);
+    color: #b91c1c;
+}
+
+/* Em tratamento */
+.modal-status.em tratamento,
+.modal-status.em-tratamento {
+    background: rgba(250,204,21,0.25);
+    color: #92400e;
+}
+
+/* Resolvido */
+.modal-status.resolvido {
+    background: rgba(34,197,94,0.2);
+    color: #166534;
+}
+
+/* ====================================
+   SEARCH — ALINHADA À DIREITA DOS CARDS
+==================================== */
+
+.incident-search-container {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: -10px;
+    margin-bottom: 10px;
+}
+
+.search-wrapper {
+    display: flex;
+    align-items: center;
+    width: 260px;
+    padding: 10px 16px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 14px;
+    border: 1px solid rgba(150,180,255,0.4);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+    transition: .25s ease;
+}
+
+.search-wrapper:hover {
+    box-shadow: 0 0 12px rgba(50, 150, 255, 0.45);
+    border-color: rgba(0,150,255,0.75);
+}
+
+.search-icon {
+    margin-right: 8px;
+    opacity: .7;
+}
+
+#pageSearch {
+    border: none;
+    outline: none;
+    background: transparent;
+    width: 100%;
+    font-size: 14px;
+}
+
+body.dark .search-wrapper {
+    background: rgba(20,20,20,0.7);
+    border-color: rgba(80,120,255,0.35);
+    color: white;
+}
+.incident-search {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end; /* ALINHA À DIREITA */
+    margin-bottom: 10px;
+}
+
+.search-wrapper {
+    display: flex;
+    align-items: center;
+    width: 260px;
+    padding: 10px 16px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 14px;
+    border: 1px solid rgba(150,180,255,0.4);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+    transition: .25s ease;
+}
+
+.search-wrapper:hover {
+    box-shadow: 0 0 12px rgba(50, 150, 255, 0.45);
+    border-color: rgba(0,150,255,0.75);
+}
+
+.search-icon {
+    margin-right: 8px;
+    opacity: .7;
+}
+
+#pageSearch {
+    border: none;
+    outline: none;
+    background: transparent;
+    width: 100%;
+    font-size: 14px;
+}

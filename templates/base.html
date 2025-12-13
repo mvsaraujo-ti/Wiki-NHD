@@ -2,8 +2,8 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    <title>NHD+ | Núcleo de Help Desk</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wiki NHD</title>
 
     <!-- Fonte -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -13,198 +13,327 @@
 
     <!-- CSS Global -->
     <link rel="stylesheet" href="/static/css/global.css">
+    {% block extra_css %}{% endblock %}
 
     <style>
+        :root {
+            --primary: #0f2a44;
+            --primary-light: #0b5ed7;
+            --sidebar-bg: #0b1f33;
+            --sidebar-hover: rgba(255,255,255,0.08);
+            --text-light: #e5e7eb;
+            --text-muted: #9ca3af;
+        }
+
         body {
             margin: 0;
             font-family: 'Inter', sans-serif;
             background: #f4f6f9;
         }
 
-        /* ---------------------------- SIDEBAR ---------------------------- */
+        /* ================= SIDEBAR ================= */
         .sidebar {
-            width: 230px;
-            background: #1e3a8a;
-            color: white;
+            width: 240px;
+            height: 100vh;
+            background: linear-gradient(180deg, #0b1f33, #071726);
             position: fixed;
             left: 0;
             top: 0;
-            height: 100vh;
-            padding-top: 20px;
             display: flex;
             flex-direction: column;
+            padding: 18px 14px;
+            box-shadow: 4px 0 25px rgba(0,0,0,0.35);
+            z-index: 1000;
         }
 
         .sidebar h2 {
             text-align: center;
-            margin-top: 0;
-            padding-top: 5px;
-            color: #fff;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 30px;
+            color: #ffffff;
         }
 
         .menu-item {
-            padding: 14px 22px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            margin-bottom: 6px;
+            border-radius: 10px;
             cursor: pointer;
-            transition: 0.2s;
             font-size: 15px;
+            color: var(--text-light);
+            transition: all 0.25s ease;
         }
 
         .menu-item:hover {
-            background: #3b82f6;
+            background: var(--sidebar-hover);
+            transform: translateX(4px);
         }
 
         .zeus-botao {
             margin-top: auto;
-            margin-bottom: 20px;
-            background: rgba(255,255,255,0.08);
-            border-radius: 8px;
+            justify-content: center;
+            background: linear-gradient(135deg, #2563eb, #38bdf8);
+            font-weight: 600;
+            box-shadow: 0 0 18px rgba(56,189,248,0.6);
         }
 
-        /* ---------------------------- HEADER ---------------------------- */
-        .header {
-            background: #0176d3;
-            color: white;
-            height: 70px;
-            display: flex;
-            align-items: center;
-            padding-left: 40px;
-            margin-left: 230px;
+        /* ================= HEADER ENTERPRISE ================= */
+.header {
+    height: 72px;
+    margin-left: 240px;
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(90deg, #0b1f33, #0b5ed7);
+    color: white;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+    position: sticky;
+    top: 0;
+    z-index: 900;
+}
+
+.header-left {
+    display: flex;
+    flex-direction: column;
+}
+
+.platform-name {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.platform-subtitle {
+    font-size: 13px;
+    opacity: 0.85;
+    margin-top: 2px;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.theme-toggle {
+    background: rgba(255,255,255,0.15);
+    border: none;
+    color: white;
+    font-size: 18px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all .2s ease;
+}
+
+.theme-toggle:hover {
+    background: rgba(255,255,255,0.25);
+}
+
+
+        .header h1 {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: .5px;
         }
 
-        /* ---------------------------- SEARCH ---------------------------- */
-        .search-box {
-            max-width: 750px;
-            width: calc(100% - 230px);
-            margin: 25px auto;
-            display: flex;
-            padding-left: 230px;
-        }
-
-        /* ---------------------------- CONTENT ---------------------------- */
+        /* ================= CONTENT ================= */
         .content {
-            margin-left: 230px;
-            padding: 20px 40px;
+            margin-left: 240px;
+            padding: 30px 40px;
+            min-height: calc(100vh - 72px);
         }
 
         footer {
-            margin-left: 230px;
-            padding: 25px;
+            margin-left: 240px;
+            padding: 20px;
             text-align: center;
-            margin-top: 40px;
             background: #fff;
-            border-top: 1px solid #ddd;
+            border-top: 1px solid #e5e7eb;
+            font-size: 14px;
         }
 
-        /* ---------------------------- BOTÃO ZEUS ---------------------------- */
+        /* ================= ZEUS BUTTON ================= */
         #zeusButton {
             position: fixed;
             bottom: 25px;
             right: 25px;
-            width: 60px;
-            height: 60px;
-            background: #2563eb;
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, #2563eb, #38bdf8);
             border-radius: 50%;
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             cursor: pointer;
-            box-shadow: 0 8px 18px rgba(0,0,0,0.25);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+            animation: pulse 2s infinite;
+            z-index: 2000;
         }
 
         #zeusButton img {
-            width: 35px;
+            width: 38px;
         }
 
-        /* ---------------------------- CHAT ZEUS ---------------------------- */
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 12px rgba(0,150,255,.4); }
+            50% { transform: scale(1.08); box-shadow: 0 0 24px rgba(0,150,255,.9); }
+            100% { transform: scale(1); box-shadow: 0 0 12px rgba(0,150,255,.4); }
+        }
+
+        /* ================= CHAT ZEUS ================= */
         .zeus-chat-box {
             position: fixed;
-            bottom: 95px;
+            bottom: 110px;
             right: 25px;
-            width: 350px;
-            height: 470px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 8px 18px rgba(0,0,0,0.25);
+            width: 380px;
+            height: 540px;
             display: none;
             flex-direction: column;
+            background: rgba(255,255,255,.15);
+            backdrop-filter: blur(18px);
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,.25);
+            box-shadow: 0 0 30px rgba(0,150,255,.4);
             overflow: hidden;
-            z-index: 999999;
+            z-index: 3000;
+            animation: slideUp .35s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(40px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         .chat-header {
-            background: #2563eb;
-            color: white;
-            padding: 12px;
+            background: linear-gradient(90deg, #2563eb, #38bdf8);
+            padding: 14px;
+            color: #fff;
+            font-weight: 600;
             display: flex;
             justify-content: space-between;
-            font-weight: bold;
-        }
-
-        .chat-close {
-            cursor: pointer;
+            align-items: center;
         }
 
         .chat-messages {
-            padding: 10px;
-            height: 350px;
+            flex: 1;
+            padding: 14px;
             overflow-y: auto;
         }
 
-        .chat-input-area {
-            padding: 10px;
-            display: flex;
-            gap: 5px;
-        }
-
-        /* ---------------------------- MENSAGENS ---------------------------- */
-
         .msg {
             display: flex;
-            margin-bottom: 12px;
             gap: 10px;
-            align-items: flex-start;
+            margin-bottom: 12px;
         }
 
         .msg img {
-            width: 32px;
-            height: 32px;
+            width: 34px;
+            height: 34px;
             border-radius: 50%;
         }
 
         .msg-text {
             background: #fff;
             padding: 10px 14px;
-            border-radius: 8px;
-            max-width: 80%;
+            border-radius: 10px;
             font-size: 14px;
+            max-width: 80%;
+            box-shadow: 0 2px 8px rgba(0,0,0,.1);
         }
 
         .msg-zeus .msg-text {
-            background: #e8f0ff;
+            background: linear-gradient(135deg, #e0ecff, #f5f9ff);
+            border-left: 4px solid #2563eb;
         }
 
-        /* ---------------------------- ANIMAÇÃO DIGITANDO ---------------------------- */
-        .typing-indicator {
-            margin-left: 50px;
-            font-style: italic;
-            color: #666;
-            animation: blink 1s infinite;
+        .chat-input-area {
+            display: flex;
+            gap: 8px;
+            padding: 12px;
+            background: rgba(255,255,255,.9);
         }
 
-        @keyframes blink {
-            0% { opacity: .3; }
-            50% { opacity: 1; }
-            100% { opacity: .3; }
+        .chat-input-area input {
+            flex: 1;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #d1d5db;
         }
 
-        /* ---------------------------- DARK MODE ---------------------------- */
-        body.dark {
-            background: #1a1a1a;
-            color: #ddd;
+        .chat-input-area button {
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: none;
+            background: #2563eb;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
         }
-        body.dark .zeus-chat-box { background: #2b2b2b; }
-        body.dark .msg-text { background: #333; color: #eee; }
-        body.dark .msg-zeus .msg-text { background: #1e3a8a; color: #fff; }
+        /* ================= DARK MODE PROFISSIONAL ================= */
+body.dark {
+    background: #0f172a;
+    color: #e5e7eb;
+}
+
+/* Header */
+body.dark .header {
+    background: linear-gradient(90deg, #020617, #0b3b8a);
+}
+
+/* Sidebar */
+body.dark .sidebar {
+    background: linear-gradient(180deg, #020617, #020617);
+}
+
+body.dark .menu-item {
+    color: #e5e7eb;
+}
+
+body.dark .menu-item:hover {
+    background: rgba(255,255,255,0.08);
+}
+
+/* Content */
+body.dark .content {
+    background: #020617;
+}
+
+/* Cards (portal, feed etc) */
+body.dark .shortcut-card,
+body.dark .incident-card {
+    background: #020617;
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 0 0 transparent;
+}
+
+/* Footer */
+body.dark footer {
+    background: #020617;
+    color: #9ca3af;
+    border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+/* Chat Zeus */
+body.dark .zeus-chat-box {
+    background: rgba(2,6,23,0.95);
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+body.dark .msg-text {
+    background: #020617;
+    color: #e5e7eb;
+}
+
+body.dark .msg-zeus .msg-text {
+    background: linear-gradient(135deg, #1e3a8a, #1e40af);
+    color: #fff;
+}
 
     </style>
 </head>
@@ -215,31 +344,32 @@
 <div class="sidebar">
     <h2>NHD+</h2>
 
-    <div class="menu-item" onclick="window.location.href='/portal'">🏠 Portal</div>
-    <div class="menu-item" onclick="window.location.href='/feed'">📰 Feed</div>
-    <div class="menu-item" onclick="window.location.href='/incidentes'">🚨 Incidentes</div>
-    <div class="menu-item" onclick="window.location.href='/'">📚 Wiki</div>
+    <div class="menu-item" onclick="location.href='/portal'">🏠 Portal</div>
+    <div class="menu-item" onclick="location.href='/feed'">📰 Feed</div>
+    <div class="menu-item" onclick="location.href='/incidentes'">🚨 Incidentes</div>
+    <div class="menu-item" onclick="location.href='/'">📚 Wiki</div>
 
-    <div class="menu-item zeus-botao" onclick="abrirZeusChat()">🤖 Zeus</div>
+    <div class="menu-item zeus-botao" onclick="abrirZeusChat()">🤖 Zeus IA</div>
 </div>
 
 <!-- HEADER -->
 <div class="header">
-    <h1>Núcleo de Help Desk</h1>
+    <div class="header-left">
+        <div class="platform-subtitle">
+            Núcleo de Help Desk • TJMA
+        </div>
+    </div>
+
+    <div class="header-right">
+        <button class="theme-toggle" onclick="toggleDark()">🌙</button>
+    </div>
 </div>
 
-<!-- SEARCH -->
-<form action="/search" method="get">
-    <div class="search-box">
-        <input type="text" name="query" placeholder="Pesquisar por sistema, acesso, manual, suporte..." required>
-        <button type="submit">Buscar</button>
-    </div>
-</form>
+
 
 <!-- CONTENT -->
 <div class="content">
-    {% block content %}
-    {% endblock %}
+    {% block content %}{% endblock %}
 </div>
 
 <!-- FOOTER -->
@@ -247,82 +377,82 @@
     Wiki NHD • Desenvolvido por Maxwell Araujo
 </footer>
 
-<!-- BOTÃO FLUTUANTE ZEUS -->
+<!-- BOTÃO ZEUS -->
 <div id="zeusButton" onclick="abrirZeusChat()">
     <img src="/static/images/zeus.png">
 </div>
 
-<!-- JANELA DO CHAT -->
+<!-- CHAT ZEUS -->
 <div id="zeusChat" class="zeus-chat-box">
     <div class="chat-header">
-        🤖 Zeus — Assistente Inteligente
-        <span class="chat-close" onclick="fecharZeusChat()">✖</span>
+        🤖 Zeus — Assistente
+        <span style="cursor:pointer" onclick="fecharZeusChat()">✖</span>
     </div>
 
     <div id="chatMessages" class="chat-messages"></div>
 
     <div class="chat-input-area">
-        <input id="chatInput" type="text" placeholder="Digite sua pergunta..." onkeydown="if(event.key==='Enter') enviarZeus()">
+        <input id="chatInput" placeholder="Digite sua pergunta..."
+               onkeydown="if(event.key==='Enter') enviarZeus()">
         <button onclick="enviarZeus()">Enviar</button>
     </div>
 </div>
 
-<!-- BOTÃO DARK MODE (TEMPORÁRIO) -->
-<button onclick="toggleDark()" style="position: fixed; top: 20px; right: 20px; padding: 6px 10px;">🌙</button>
-
 <script>
-function abrirZeusChat(){
-    document.getElementById("zeusChat").style.display="flex";
+function abrirZeusChat() {
+    document.getElementById("zeusChat").style.display = "flex";
 }
 
-function fecharZeusChat(){
-    document.getElementById("zeusChat").style.display="none";
+function fecharZeusChat() {
+    document.getElementById("zeusChat").style.display = "none";
 }
 
-async function enviarZeus(){
+async function enviarZeus() {
     const input = document.getElementById("chatInput");
-    const msg = input.value.trim();
-    if(!msg) return;
+    const text = input.value.trim();
+    if (!text) return;
 
     const box = document.getElementById("chatMessages");
-
-    // mensagem do usuário
     box.innerHTML += `
-    <div class="msg msg-user">
-        <img src="/static/images/user.png">
-        <div class="msg-text">${msg}</div>
-    </div>`;
-
+        <div class="msg msg-user">
+            <img src="/static/images/user.png">
+            <div class="msg-text">${text}</div>
+        </div>`;
     input.value = "";
-    box.scrollTop = box.scrollHeight;
 
-    // indicador digitando
-    box.innerHTML += `<div id="typing" class="typing-indicator">Zeus está digitando...</div>`;
-    box.scrollTop = box.scrollHeight;
-
-    const resposta = await fetch("http://localhost:8601/chat", {
+    const r = await fetch("http://localhost:8601/chat", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({question: msg})
+        body: JSON.stringify({ question: text })
     });
 
-    const data = await resposta.json();
+    const data = await r.json();
 
-    document.getElementById("typing")?.remove();
-
-    // resposta do Zeus
     box.innerHTML += `
-    <div class="msg msg-zeus">
-        <img src="/static/images/zeus.png">
-        <div class="msg-text">${data.answer}</div>
-    </div>`;
+        <div class="msg msg-zeus">
+            <img src="/static/images/zeus.png">
+            <div class="msg-text">${data.answer}</div>
+        </div>`;
 
     box.scrollTop = box.scrollHeight;
 }
-
-function toggleDark(){
+</script>
+<script>
+function toggleDark() {
     document.body.classList.toggle("dark");
+
+    localStorage.setItem(
+        "nhd_theme",
+        document.body.classList.contains("dark") ? "dark" : "light"
+    );
 }
+
+// aplica automaticamente ao carregar qualquer página
+window.addEventListener("DOMContentLoaded", () => {
+    if (localStorage.getItem("nhd_theme") === "dark") {
+        document.body.classList.add("dark");
+    }
+});
 </script>
 
 </body>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NHD+ — Login</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e3a8a);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            color: white;
+        }
+
+        .particles {
+            position: absolute;
+            inset: 0;
+            background: url("https://i.imgur.com/e0QYjKj.png");
+            opacity: 0.15;
+            animation: move 18s linear infinite;
+        }
+        @keyframes move {
+            from { transform: translateY(0); }
+            to   { transform: translateY(-250px); }
+        }
+
+        .login-box {
+            width: 380px;
+            background: rgba(255,255,255,0.06);
+            backdrop-filter: blur(14px);
+            padding: 35px;
+            border-radius: 14px;
+            box-shadow: 0 0 18px rgba(0,0,0,0.3);
+            z-index: 10;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(25px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 26px;
+            font-weight: 700;
+        }
+
+        .avatar img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: block;
+            margin: 0 auto 15px;
+            border: 3px solid #38bdf8;
+            box-shadow: 0 0 12px #38bdf8;
+        }
+
+        .input-group {
+            margin-bottom: 18px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            outline: none;
+            background: rgba(255,255,255,0.15);
+            color: white;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 12px;
+            background: #38bdf8;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 10px;
+            transition: 0.2s;
+        }
+
+        .btn-login:hover {
+            background: #0ea5e9;
+        }
+
+        .links {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        .links a {
+            color: #93c5fd;
+            text-decoration: none;
+        }
+
+        .error-msg {
+            margin-top: 10px;
+            text-align: center;
+            color: #fca5a5;
+            font-size: 14px;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="particles"></div>
+
+<div class="login-box">
+    <div class="logo">🔷 NHD+ Login</div>
+
+    <div class="avatar">
+        <img src="/static/images/user.png">
+    </div>
+
+    <div class="input-group">
+        <input type="text" id="user" placeholder="Usuário" onkeydown="if(event.key==='Enter') logar()">
+    </div>
+
+    <div class="input-group">
+        <input type="password" id="pass" placeholder="Senha" onkeydown="if(event.key==='Enter') logar()">
+    </div>
+
+    <button class="btn-login" onclick="logar()">Entrar</button>
+
+    <div class="links">
+        <a href="#">🔑 Esqueci minha senha</a><br>
+        <label><input type="checkbox" id="remember"> Lembrar-me</label>
+    </div>
+
+    <div id="error" class="error-msg">Usuário ou senha incorretos</div>
+</div>
+
+<script>
+async function logar() {
+    const usuario = document.getElementById("user").value.trim();
+    const senha = document.getElementById("pass").value.trim();
+    const err = document.getElementById("error");
+
+    if (!usuario || !senha) {
+        err.innerText = "Preencha usuário e senha";
+        err.style.display = "block";
+        return;
+    }
+
+    const formData = new URLSearchParams();
+    formData.append("username", usuario);
+    formData.append("password", senha);
+
+    try {
+        const response = await fetch("http://localhost:8602/auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: formData
+        });
+
+        if (!response.ok) {
+            err.innerText = "Falha de comunicação com servidor";
+            err.style.display = "block";
+            return;
+        }
+
+        const data = await response.json();
+
+        if (!data.access_token) {
+            err.innerText = "Usuário ou senha incorretos";
+            err.style.display = "block";
+            return;
+        }
+
+        localStorage.setItem("token", data.access_token);
+        localStorage.setItem("role", data.role);
+
+        window.location.href = "/";
+    } catch (e) {
+        err.innerText = "Erro ao conectar ao servidor";
+        err.style.display = "block";
+    }
+}
+</script>
+
+</body>
+</html>

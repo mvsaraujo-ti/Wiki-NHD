@@ -1,82 +1,201 @@
 {% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/incidentes.css">
+{% endblock %}
+
 {% block content %}
 
-<h1 style="margin-bottom: 20px;">🚨 Portal de Incidentes</h1>
+<h1 class="incident-title">
+    🚨 Portal de Incidentes
+    <span class="incident-subtitle">Monitoramento e gestão operacional</span>
+</h1>
+
+<!-- SEARCH BAR CORRIGIDA E 100% ALINHADA -->
+<div class="incident-search">
+    <div class="incident-search-box">
+        <span class="search-icon">🔍</span>
+        <input id="pageSearch" type="text" placeholder="Pesquisar nesta página..." oninput="searchLocal()">
+    </div>
+</div>
+
+
 
 <!-- CARDS RESUMO -->
 <div class="incident-cards">
 
     <div class="incident-card open">
-        <h3>🔴 Abertos</h3>
+        <h3>Abertos</h3>
         <p class="number">4</p>
+        <span class="card-icon">!</span>
     </div>
 
     <div class="incident-card progress">
-        <h3>🟡 Em andamento</h3>
+        <h3>Em andamento</h3>
         <p class="number">2</p>
+        <span class="card-icon">↻</span>
     </div>
 
     <div class="incident-card resolved">
-        <h3>🟢 Resolvidos</h3>
+        <h3>Resolvidos</h3>
         <p class="number">12</p>
+        <span class="card-icon">✓</span>
     </div>
 
     <div class="incident-card month">
-        <h3>📅 Total no mês</h3>
+        <h3>Total no mês</h3>
         <p class="number">18</p>
+        <span class="card-icon">📅</span>
     </div>
 
 </div>
 
-<!-- BOTÃO NOVO INCIDENTE -->
-<button class="new-incident-btn" onclick="alert('Novo incidente em breve...')">
-    ➕ Registrar Incidente
-</button>
+<!-- AÇÕES -->
+<div class="incident-actions">
+    <button class="new-incident-btn" onclick="alert('Novo incidente em breve...')">
+        ➕ Registrar Incidente
+    </button>
+</div>
 
-<!-- LISTA DE INCIDENTES -->
-<h2 style="margin-top: 40px;">Lista de Incidentes</h2>
+<!-- LISTA -->
+<h2 class="incident-section-title">Incidentes Recentes</h2>
 
 <table class="incident-table">
     <thead>
         <tr>
-            <th>ID</th>
-            <th>Título</th>
-            <th>Categoria</th>
+            <th>Sistema</th>
+            <th>Falha</th>
+            <th>Equipe</th>
             <th>Status</th>
-            <th>Abertura</th>
-            <th>Responsável</th>
+            <th>Atualização</th>
+            <th>Ação</th>
         </tr>
     </thead>
+
     <tbody>
 
         <tr>
-            <td>#1421</td>
-            <td>VPN Instável</td>
-            <td>Rede</td>
-            <td><span class="tag open">Aberto</span></td>
-            <td>10/02/2025</td>
-            <td>João Silva</td>
+            <td><strong>Sentinela</strong></td>
+            <td>Erro de autenticação</td>
+            <td>Infraestrutura / Sistemas</td>
+            <td><span class="tag open">Inoperante</span></td>
+            <td>12/02/2025 09:40</td>
+            <td>
+                <button class="action-btn"
+    onclick="abrirResumo(
+        'Sentinela',
+        'Erro de autenticação',
+        'Infraestrutura / Sistemas',
+        'O sistema apresenta falha no login via CNJ corporativo. Análise indica instabilidade no serviço de autenticação externo.',
+        'Inoperante'
+    )">
+    🔍
+</button>
+
+            </td>
         </tr>
 
         <tr>
-            <td>#1420</td>
-            <td>Erro no Sentinela</td>
-            <td>Sistemas</td>
-            <td><span class="tag progress">Em Andamento</span></td>
-            <td>09/02/2025</td>
-            <td>Ana Lima</td>
+            <td><strong>GLPI</strong></td>
+            <td>Interface não carrega</td>
+            <td>Service Desk</td>
+            <td><span class="tag progress">Em tratamento</span></td>
+            <td>12/02/2025 08:15</td>
+            <td>
+                <button class="action-btn"
+    onclick="abrirResumo(
+        'GLPI',
+        'Interface não carrega',
+        'Service Desk',
+        'Usuários relatam tela em branco após login. Equipe está validando serviço web.',
+        'Em tratamento'
+    )">
+    🔍
+</button>
+
+            </td>
         </tr>
 
         <tr>
-            <td>#1418</td>
-            <td>GLPI Não Carrega</td>
-            <td>TI</td>
+            <td><strong>VPN Corporativa</strong></td>
+            <td>Conexão instável</td>
+            <td>Redes</td>
             <td><span class="tag resolved">Resolvido</span></td>
-            <td>07/02/2025</td>
-            <td>Carlos Sousa</td>
+            <td>11/02/2025 17:30</td>
+            <td>
+                <button class="action-btn"
+    onclick="abrirResumo(
+        'VPN Corporativa',
+        'Conexão instável',
+        'Redes',
+        'Falha causada por manutenção no firewall. Serviço normalizado.',
+        'Resolvido'
+    )">
+    🔍
+</button>
+
+            </td>
         </tr>
 
     </tbody>
 </table>
+
+<!-- MODAL -->
+<div id="incidentModal" class="incident-modal">
+    <div class="incident-modal-content">
+        <h3 id="modalSistema"></h3>
+
+        <span id="modalStatus" class="modal-status"></span>
+
+        <p><strong>Falha:</strong> <span id="modalFalha"></span></p>
+        <p><strong>Equipe responsável:</strong> <span id="modalEquipe"></span></p>
+
+        <div class="modal-resumo">
+            <strong>Resumo do problema</strong>
+            <p id="modalResumo"></p>
+        </div>
+
+        <button class="modal-close" onclick="fecharResumo()">Fechar</button>
+    </div>
+</div>
+
+<script>
+function abrirResumo(sistema, falha, equipe, resumo, status) {
+    document.getElementById("modalSistema").innerText = sistema;
+    document.getElementById("modalFalha").innerText = falha;
+    document.getElementById("modalEquipe").innerText = equipe;
+    document.getElementById("modalResumo").innerText = resumo;
+
+    // Status
+    const statusEl = document.getElementById("modalStatus");
+    statusEl.innerText = status;
+    statusEl.className = "modal-status " + status.toLowerCase();
+
+    document.getElementById("incidentModal").style.display = "flex";
+}
+
+function fecharResumo() {
+    document.getElementById("incidentModal").style.display = "none";
+}
+
+/* 🔑 FECHAR COM ESC */
+document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape") {
+        fecharResumo();
+    }
+});
+</script>
+
+</script>
+<script>
+function searchLocal() {
+    let term = document.getElementById("pageSearch").value.toLowerCase();
+    let rows = document.querySelectorAll(".incident-table tbody tr");
+
+    rows.forEach(row => {
+        row.style.display = row.innerText.toLowerCase().includes(term) ? "" : "none";
+    });
+}
+</script>
 
 {% endblock %}

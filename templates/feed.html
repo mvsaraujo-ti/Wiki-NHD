@@ -1,59 +1,97 @@
 {% extends "base.html" %}
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/feed.css">
+{% endblock %}
+
 {% block content %}
 
-<h1 style="margin-bottom: 20px;">📰 Feed NHD+</h1>
+<div class="feed-layout">
 
-<!-- ALERTAS -->
-<h2>Alertas do Sistema</h2>
-<div class="alerts">
-    <div class="alert-card">
-        <h4>🔴 VPN Fora do Ar</h4>
-        <p>A equipe já está avaliando o problema. Tempo estimado: 20 min.</p>
+    <!-- COLUNA ESQUERDA (FEED PRINCIPAL) -->
+    <div class="feed-main">
+
+        <h1 class="feed-title">Feed NHD+</h1>
+        <p class="feed-subtitle">Atualizações internas, comunicados e informações operacionais</p>
+
+        <!-- POST 1 -->
+        <div class="post-card">
+            <div class="post-header">
+                <img src="/static/images/user.png" class="post-avatar">
+                <div>
+                    <h3 class="post-author">Setor de TI</h3>
+                    <span class="post-time">Hoje às 15:40</span>
+                </div>
+                <span class="post-menu">⋯</span>
+            </div>
+
+            <h2 class="post-title">📢 Aviso do Setor de TI</h2>
+
+            <p class="post-text">
+                Manutenção programada hoje às 18h no cluster Sentinela.
+            </p>
+
+            <img src="https://picsum.photos/900/380" class="post-image">
+
+            <div class="post-actions">
+                <button class="action-btn">👍 Curtir (0)</button>
+                <button class="action-btn">💬 Comentar</button>
+            </div>
+        </div>
+
+        <!-- POST 2 -->
+        <div class="post-card">
+            <div class="post-header">
+                <img src="/static/images/user.png" class="post-avatar">
+                <div>
+                    <h3 class="post-author">Equipe de Segurança</h3>
+                    <span class="post-time">Hoje às 10:15</span>
+                </div>
+                <span class="post-menu">⋯</span>
+            </div>
+
+            <h2 class="post-title">🎉 Evento Interno</h2>
+
+            <p class="post-text">
+                Treinamento de Segurança da Informação aberto para inscrições.
+            </p>
+
+            <img src="https://picsum.photos/901/380" class="post-image">
+
+            <div class="post-actions">
+                <button class="action-btn">👍 Curtir (0)</button>
+                <button class="action-btn">💬 Comentar</button>
+            </div>
+        </div>
+
     </div>
 
-    <div class="alert-card">
-        <h4>🟢 Sentinela Atualizado</h4>
-        <p>Versão 2.0 instalada com sucesso. Nova interface e relatórios.</p>
-    </div>
+    <!-- COLUNA DIREITA (SIDEBAR MURAL WEDUKA) -->
+    <div class="feed-sidebar">
+
+        <div class="sidebar-card">
+    <h3>Mural de Atualizações</h3>
+
+    <ul>
+        <li><a href="/incidentes?busca=cluster">🔧 Manutenção no cluster hoje às 18h</a></li>
+        <li><a href="/incidentes?busca=VPN">⚠️ VPN instável às 14h — monitorando</a></li>
+        <li><a href="/incidentes?busca=Zeus">✨ Nova funcionalidade no Zeus</a></li>
+        <li><a href="/incidentes?busca=VPN">📘 Artigo novo na Wiki: Troubleshooting VPN</a></li>
+    </ul>
 </div>
 
 
-<!-- ÚLTIMAS ATUALIZAÇÕES -->
-<h2>Últimas Atualizações</h2>
-<div class="latest-updates">
-    <div class="update-card">
-        <h4>📚 Wiki Atualizada</h4>
-        <p>Novo artigo: Configuração avançada do VPN + Troubleshooting.</p>
+        <div class="sidebar-card">
+            <h3>Links Úteis</h3>
+
+            <ul>
+                <li>📄 Wiki NHD+</li>
+                <li>🎫 Portal de Incidentes</li>
+                <li>🔐 Políticas de Segurança</li>
+            </ul>
+        </div>
+
     </div>
 
-    <div class="update-card">
-        <h4>🤖 Melhorias no Zeus</h4>
-        <p>Zeus agora sugere artigos automaticamente baseado na conversa.</p>
-    </div>
-</div>
-
-
-<!-- POSTAGENS (ESTILO REDE SOCIAL) -->
-<h2>Postagens Internas</h2>
-
-<div class="post-card">
-    <h3>📢 Aviso do Setor de TI</h3>
-    <p>Manutenção programada hoje às 18h no cluster Sentinela.</p>
-    <img src="https://picsum.photos/700/300" alt="Imagem">
-    <div class="post-footer">
-        <button onclick="alert('Curtido!')">👍 Curtir</button>
-        <button onclick="alert('Comentário...')">💬 Comentar</button>
-    </div>
-</div>
-
-<div class="post-card">
-    <h3>🎉 Evento Interno</h3>
-    <p>Treinamento de Segurança da Informação aberto para inscrições.</p>
-    <img src="https://picsum.photos/701/300" alt="Imagem">
-    <div class="post-footer">
-        <button>👍 Curtir</button>
-        <button>💬 Comentar</button>
-    </div>
 </div>
 
 {% endblock %}
