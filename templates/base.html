@@ -334,6 +334,22 @@ body.dark .msg-zeus .msg-text {
     background: linear-gradient(135deg, #1e3a8a, #1e40af);
     color: #fff;
 }
+.logout-btn {
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.logout-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-1px);
+}
 
     </style>
 </head>
@@ -361,8 +377,13 @@ body.dark .msg-zeus .msg-text {
     </div>
 
     <div class="header-right">
-        <button class="theme-toggle" onclick="toggleDark()">🌙</button>
-    </div>
+    <button class="theme-toggle" onclick="toggleDark()" title="Alternar tema">🌙</button>
+
+    <button class="logout-btn" onclick="logout()" title="Sair do sistema">
+        Sair
+    </button>
+</div>
+
 </div>
 
 
@@ -454,6 +475,21 @@ window.addEventListener("DOMContentLoaded", () => {
     }
 });
 </script>
+<script>
+function logout() {
+    // Remove cookie corretamente (path + domain)
+    document.cookie = "token=; Path=/; Domain=localhost; expires=Thu, 01 Jan 1970 00:00:00 GMT;";
+    document.cookie = "token=; Path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;";
+
+    // Limpa qualquer resíduo (boa prática)
+    localStorage.clear();
+    sessionStorage.clear();
+
+    // Redireciona para login
+    window.location.href = "/login";
+}
+</script>
+
 
 </body>
 </html>

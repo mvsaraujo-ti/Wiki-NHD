@@ -185,7 +185,7 @@ async function logar() {
         localStorage.setItem("token", data.access_token);
         localStorage.setItem("role", data.role);
 
-        window.location.href = "/";
+        window.location.href = "/portal";
     } catch (e) {
         err.innerText = "Erro ao conectar ao servidor";
         err.style.display = "block";

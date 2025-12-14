@@ -1,10 +1,8 @@
 from datetime import datetime, timedelta
 from passlib.context import CryptContext
 from jose import jwt
-from sqlmodel import Session, select
-from .models import User
 
-SECRET_KEY = "nhd_super_secret_key"     # depois troque por algo seguro
+SECRET_KEY = "nhd_super_secret_key"  # DEMO — trocar depois
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
@@ -14,39 +12,25 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 # -----------------------------
 # HASH e verificação de senha
 # -----------------------------
-def hash_password(password: str):
+def hash_password(password: str) -> str:
     return pwd_context.hash(password)
 
 
-def verify_password(password: str, hash_db: str):
-    return pwd_context.verify(password, hash_db)
-
-
-# -----------------------------
-# Autenticação
-# -----------------------------
-def authenticate_user(session: Session, username: str, password: str):
-    query = select(User).where(User.username == username)
-    user = session.exec(query).first()
-
-    if not user:
-        return None
-
-    if not verify_password(password, user.password_hash):
-        return None
-
-    return user
+def verify_password(password: str, password_hash: str) -> bool:
+    return pwd_context.verify(password, password_hash)
 
 
 # -----------------------------
 # GERAR TOKEN JWT
 # -----------------------------
-def create_access_token(data: dict):
-    to_encode = data.copy()
+def create_access_token(username: str, role: str) -> str:
     expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
 
-    to_encode.update({"exp": expire})
+    payload = {
+        "sub": username,
+        "role": role,
+        "exp": expire
+    }
 
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-
-    return encoded_jwt
+    token = jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
+    return token

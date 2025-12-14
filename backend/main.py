@@ -1,7 +1,7 @@
 ﻿from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 from routes.articles import router as articles_router
 from pydantic import BaseModel
 import os
@@ -28,9 +28,18 @@ app = FastAPI(title="Wiki NHD + Zeus Assistant")
 
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
+# =======================================
+#   FUNÇÃO DE GATE (LOGIN ÚNICO – DEMO)
+# =======================================
+def require_login(request: Request):
+    token = request.cookies.get("token")
+    if not token:
+        return False
+    return True
+
 
 # =======================================
-#   PÁGINA LOGIN
+#   LOGIN
 # =======================================
 @app.get("/login", response_class=HTMLResponse)
 def login_page(request: Request):
@@ -38,10 +47,12 @@ def login_page(request: Request):
 
 
 # =======================================
-#   HOME
+#   HOME (PROTEGIDA)
 # =======================================
-@app.get("/")
+@app.get("/", response_class=HTMLResponse)
 def home(request: Request):
+    if not require_login(request):
+        return RedirectResponse("/login")
     return templates.TemplateResponse("home.html", {"request": request})
 
 
@@ -50,6 +61,9 @@ def home(request: Request):
 # =======================================
 @app.get("/search", response_class=HTMLResponse)
 def search_articles(request: Request, query: str = ""):
+    if not require_login(request):
+        return RedirectResponse("/login")
+
     results = []
     query_lower = query.lower()
 
@@ -57,12 +71,10 @@ def search_articles(request: Request, query: str = ""):
         if filename.endswith(".md"):
             filepath = os.path.join(ARTICLES_DIR, filename)
 
-            # busca no nome
             if query_lower in filename.lower():
                 results.append(filename)
                 continue
 
-            # busca no conteúdo
             with open(filepath, "r", encoding="utf-8") as f:
                 content = f.read().lower()
                 if query_lower in content:
@@ -79,6 +91,9 @@ def search_articles(request: Request, query: str = ""):
 # =======================================
 @app.get("/category/{category_name}", response_class=HTMLResponse)
 def category_page(request: Request, category_name: str):
+    if not require_login(request):
+        return RedirectResponse("/login")
+
     results = []
     category_lower = category_name.lower()
 
@@ -113,6 +128,8 @@ app.include_router(articles_router, prefix="/articles")
 # =======================================
 @app.get("/zeus-panel", response_class=HTMLResponse)
 def zeus_panel(request: Request):
+    if not require_login(request):
+        return RedirectResponse("/login")
     return templates.TemplateResponse("zeus_panel.html", {"request": request})
 
 
@@ -140,18 +157,20 @@ def zeus_chat(payload: ZeusQuery):
 # =======================================
 #   PÁGINAS DO NHD+
 # =======================================
-@app.get("/feed")
+@app.get("/feed", response_class=HTMLResponse)
 def feed_page(request: Request):
+    if not require_login(request):
+        return RedirectResponse("/login")
     return templates.TemplateResponse("feed.html", {"request": request})
 
-@app.get("/incidentes")
+@app.get("/incidentes", response_class=HTMLResponse)
 def incidentes_page(request: Request):
+    if not require_login(request):
+        return RedirectResponse("/login")
     return templates.TemplateResponse("incidentes.html", {"request": request})
 
-@app.get("/portal")
+@app.get("/portal", response_class=HTMLResponse)
 def portal_page(request: Request):
+    if not require_login(request):
+        return RedirectResponse("/login")
     return templates.TemplateResponse("portal.html", {"request": request})
-
-@app.get("/login", response_class=HTMLResponse)
-def login_page(request: Request):
-    return templates.TemplateResponse("login.html", {"request": request})

@@ -1,0 +1,37 @@
+#!/bin/bash
+
+echo "======================================"
+echo "🧠 Iniciando NHD+ - PCZEUS (Casa)"
+echo "📁 Projeto: ~/DEV/Wiki-NHD"
+echo "======================================"
+
+# Garantia de caminho
+cd /home/zeus/DEV/Wiki-NHD || {
+  echo "❌ Pasta Wiki-NHD não encontrada"
+  exit 1
+}
+
+# Ativar venv
+if [ ! -d "venv" ]; then
+  echo "❌ venv não encontrado. Abortando."
+  exit 1
+fi
+
+echo "🐍 Ativando ambiente virtual..."
+source venv/bin/activate
+
+# Validação
+PY=$(which python3)
+if [[ "$PY" != *"Wiki-NHD/venv"* ]]; then
+  echo "❌ Ambiente virtual incorreto"
+  echo "Python atual: $PY"
+  exit 1
+fi
+
+echo "✅ venv correto ativo"
+
+# Subir NHD+
+echo "🚀 Iniciando NHD+..."
+cd backend || exit 1
+uvicorn main:app --host 0.0.0.0 --port 8500
+
